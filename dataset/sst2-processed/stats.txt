@@ -1,0 +1,8 @@
+full_train_set_size = 67349
+valid_set_size = 872
+test_set_size = 1821
+num_users = 10
+samples_per_user = 6734
+fl_train_set_size = 67340
+dir_alpha = 1000.0
+num_topics_for_dir = 2

@@ -1,0 +1,8 @@
+__pycache__/
+outputs/
+temp/
+dataset/celeba-processed/
+dataset/cifar100-processed/
+dataset/cifar-10-batches-py/
+dataset/TempMNIST/
+dataset/cifar-10-python.tar.gz

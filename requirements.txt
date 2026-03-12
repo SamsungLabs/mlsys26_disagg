@@ -1,0 +1,14 @@
+torch==2.4.0
+torchvision==0.19.0
+datasets==3.1.0
+evaluate==0.4.6
+peft==0.18.1
+scipy==1.15.3
+tqdm==4.67.1
+cryptography==43.0.3
+pycryptodomex==3.23.0
+numpy==1.23.5
+scikit_learn==1.7.2
+transformers==5.3.0
+peft==0.18.1
+timm==1.0.25
