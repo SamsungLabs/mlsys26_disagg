@@ -22,6 +22,7 @@ var_params = [
         'RHO': [10]
     },
     {# 1    parameters for the results in Figure 6 of the paper
+     # for faster results use the best values for RHO: 100 for DisAgg & 50 for OPA
     'M': [10_000],
     'N': [10_000],
     'RHO': [-1, 5, 10, 25, 50, 100, 250, 500, 1_000],
@@ -31,6 +32,7 @@ var_params = [
     'N': [1_000, 3_000, 5_000, 10_000],
     },
     {# 3    parameters for the results in Table 3 of the paper
+     # for faster results use the best values for RHO: 500 for DisAgg & 250 for OPA
     'M': [100_000],
     'N': [100_000],
     'RHO': [-1, 5, 10, 25, 50, 100, 250, 500, 1_000],
@@ -95,7 +97,7 @@ init_parameters = {
     'M': 10_000,   # model size as number of parameters
     'N': 100,      # number of selected clients
     'D': 0.2,       # delta = maximum dropout fraction (tolerance)
-    'drop_frac': 0.0,    # the actual simulated dropouts applied in clients & committee/aggregators sets
+    'drop_frac': 0.0,  # simulated proportion of dropout in clients & committee/aggregators (>0.0 for OPA/DisAgg only)
     'T': 0.1,       # gamma = maximum corrupt fraction (tolerance)
     'sigma': 40,    # security parameter
     'eta': 40,      # correctness parameter

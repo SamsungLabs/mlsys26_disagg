@@ -515,7 +515,7 @@ def start_simulation(parameters):
 
     ### Setup
     # to match opa style reduce the weight quantization to accommodate for N clients
-    parameters['P'] = int(init_params["P"] - np.ceil(np.log2(parameters["N"]))) # 64 - math.ceil(math.log2(parameters['N']))
+    parameters['P'] = int(init_params["P"] - np.ceil(np.log2(parameters["N"])))
     print(f"plaintext_field_bits = {parameters['P']}")
     
     quantizer = quantization.Quantizer(clip_value=2.0,
@@ -563,7 +563,6 @@ def start_simulation(parameters):
     parameters['U'] = t_r   # reconstruction threshold alias for LCC
     parameters['T_c'] = t_c   # corruption threshold
     parameters['Q'] = parameters['N'] // parameters['RHO']
-    parameters['A_min_X'] = A // A_min
 
     # set model size if training
     if parameters['USE_TRAINING']:

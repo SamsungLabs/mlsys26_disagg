@@ -454,13 +454,18 @@ def train_model(cid):
     gm, sh = load_global_model()
     set_flat_model(net, gm, sh)
 
+    if dataset_cfg.params['learning_rate'] < 0:
+        l_r = 0.01
+    else:
+        l_r = dataset_cfg.params['learning_rate']
+
     DEVICE = get_device_per_client(cid)
     model.train(
         net,
         trainloader,
         DEVICE,
         epochs=1,
-        learning_rate=0.01,
+        learning_rate=l_r,
         momentum=0.9,
 
     )
@@ -631,7 +636,7 @@ def get_vision_model(cid=None):
     )
 
     if dataset_cfg.model == 'tinynet':
-        freeze_params(model, '^((?!blocks\.6\.0\.se\.conv_exp)(?!_model\.classifier).)*$')
+        freeze_params(model, '^((?!blocks\.5\.4\.conv_dw)(?!blocks\.5\.4\.bn2)(?!_model\.bn2)(?!_model\.classifier).)*$')
     else:
         peft_config = LoraConfig(
             inference_mode=False,

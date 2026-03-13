@@ -198,7 +198,6 @@ class Client(Member):
         self.neighbor_shares = {}
         derived_keys = {}
         for _,sh in shares:
-            # sid = sender id, cid = recipient client id
             sid, cid, bu_shares, mask_key_shares = self.decrypt(sh)
             if cid != self.cid:
                 raise ValueError('Wrong recipient ID!')
@@ -249,7 +248,6 @@ class Client(Member):
         # simulate encryption, simply deserialize with pickle
         dec = pickle.loads(cipher)
         return dec
-
 
 
 def client_get_keys_worker(input_args):

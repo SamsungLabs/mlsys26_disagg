@@ -765,7 +765,6 @@ def start_simulation(parameters):
     # calculate optimized rho
     RHO = parameters['RHO']
     parameters['Q'] = parameters['N'] // RHO
-    parameters['A_min_X'] = A // A_min
     parameters['T_c'] = t_c   # corruption threshold
     parameters['T_r'] = t_r   # reconstruction threshold
     parameters['U'] = t_r   # reconstruction threshold alias
