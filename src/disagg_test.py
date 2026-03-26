@@ -509,15 +509,12 @@ def start_simulation(parameters):
 
     clk = common.Clock()
     clk.tic()
-    
-    # keep original parameters as const starting point
-    init_params = copy.deepcopy(init_parameters)
 
     ### Setup
     # to match opa style reduce the weight quantization to accommodate for N clients
-    parameters['P'] = int(init_params["P"] - np.ceil(np.log2(parameters["N"])))
+    parameters['P'] = int(parameters["P"] - np.ceil(np.log2(parameters["N"])))
     print(f"plaintext_field_bits = {parameters['P']}")
-    
+
     quantizer = quantization.Quantizer(clip_value=2.0,
                                               clients_scale_factor=parameters['N'],
                                               num_bits=parameters['P'])

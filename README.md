@@ -43,15 +43,15 @@ For plain-text FL experiments, set `USE_SECURITY=False` in `src/constants.py` an
 | Index | Description                                        | Recommended num_proc | Scripts to run                                                      |
 |-------|----------------------------------------------------|----------------------| ------------------------------------------------------------------- |
 | 0     | Quick test (N=100, M=1k)                           | 16                   | disagg_test.py                                                      |
-| 1     | Set M=N=10k and vary ρ (Figure 6)                  | 16                   | {disagg|opa}_test.py                                                |
-| 2     | Sweep M, N with all protocols (Figure 7)           | 16                   | {disagg|opa|light_secagg|secagg_plus}_test.py                       |
-| 3     | Set M=N=100k and vary ρ (Table 3)                  | 4                    | {disagg|opa}_test.py                                                |
-| 4     | Set M=N=10k and vary γ,δ (Figure 8)                | 16                   | {disagg|opa}_test.py                                                |
-| 5     | Train NLP model with SST2 (Table 6)                | 4                    | {disagg|opa}_test.py for lora_r=16,  disagg_test.py for lora_r=64   |
-| 6     | Train EfficientNet model with CELEBA (Table 6)     | 4                    | {disagg|opa}_test.py                                                |
-| 7     | Train CNN models on MNIST & CIFAR10 (Figure 9)     | 16                   | {disagg|opa}_test.py                                                |
-| 8     | Train TinyNet model on CIFAR100 (Figure 9)         | 16                   | {disagg|opa}_test.py                                                |
-| 9     | Experiment with stragglers on CIFAR10 (Figure 12)  | 16                   | {disagg|opa}_test.py                                                |
+| 1     | Set M=N=10k and vary ρ (Figure 6)                  | 16                   | {disagg\|opa}_test.py                                               |
+| 2     | Sweep M, N with all protocols (Figure 7)           | 16                   | {disagg\|opa\|light_secagg\|secagg_plus}_test.py                    |
+| 3     | Set M=N=100k and vary ρ (Table 3)                  | 4                    | {disagg\|opa}_test.py                                               |
+| 4     | Set M=N=10k and vary γ,δ (Figure 8)                | 16                   | {disagg\|opa}_test.py                                               |
+| 5     | Train NLP model with SST2 (Table 6)                | 2                    | {disagg\|opa}_test.py for lora_r=16,  disagg_test.py for lora_r=64  |
+| 6     | Train EfficientNet model with CELEBA (Table 6)     | 2                    | {disagg\|opa}_test.py                                               |
+| 7     | Train CNN models on MNIST & CIFAR10 (Figure 9)     | 16                   | {disagg\|opa}_test.py                                               |
+| 8     | Train TinyNet model on CIFAR100 (Figure 9)         | 4                    | {disagg\|opa}_test.py                                               |
+| 9     | Experiment with stragglers on CIFAR10 (Figure 12)  | 16                   | {disagg\|opa}_test.py                                               |
 
 Example — run SST2 experiment with DisAgg:
 ```bash

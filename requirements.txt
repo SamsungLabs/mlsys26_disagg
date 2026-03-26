@@ -11,3 +11,6 @@ numpy==1.23.5
 scikit_learn==1.7.2
 transformers==4.57.5
 timm==1.0.25
+networkx==3.4.2
+sympy==1.14.0
+pandas==2.3.3

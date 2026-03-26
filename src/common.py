@@ -359,8 +359,6 @@ def run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simu
     ts_log_name = _get_timestamp_name()
     ts_log_name_out = ts_log_name
 
-    params = copy.deepcopy(init_parameters)
-
     df_all = None
 
     out_dir = Path('outputs')
@@ -370,6 +368,9 @@ def run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simu
     names, vals = name_val_pairs
 
     for vv in vals:
+        # start with the initial constant parameters
+        params = copy.deepcopy(init_parameters)
+
         # set variable parameters
         for i,v in enumerate(vv):
             params[names[i]] = v
