@@ -1,4 +1,4 @@
-# DisAgg v1.0.0-alpha
+# DisAgg: Distributed Aggregators for Efficient Secure Aggregation in Federated Learning
 
 ## Hardware Requirements
 
@@ -61,3 +61,9 @@ PYTHONPATH=$PYTHONPATH:. python src/disagg_test.py 5
 ## Experiment customization
 
 Experiments can be customized by modifying the configuration parameters in `src/constants.py`. Edit `init_parameters` to change default values, or add new sweep configurations to `var_params`. Parallelism is controlled by `num_proc`; set to `0` for sequential execution.
+
+## Citation
+
+```
+Mehmood, H., Tatsis, G., Alexopoulos, D., Saravanan, K., Xu, J., Drosou, A., and Ozay, M. DisAgg: Distributed Aggregators for Efficient Secure Aggregation in Federated Learning. To appear in Proceedings of the Ninth Annual Conference on Machine Learning and Systems, MLSys 2026.
+```
