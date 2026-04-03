@@ -1,13 +1,11 @@
 #  Copyright (C) 2026 Samsung Electronics
 #
-# You may not use this file except in compliance with the License. You may obtain a copy of the License at https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt.
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 # ==============================================================================
 """
 CNN model architecture, training and testing functions for MNIST & CIFAR10.
-The code is ported adapted from https://github.com/adap/flower/blob/main/baselines/flwr_baselines/flwr_baselines/publications/fedavg_mnist/model.py
-and PyTorch tutorials, https://github.com/pytorch/tutorials
+This code is adapted from Flower Baselines https://github.com/adap/flower/blob/main/baselines/flwr_baselines/flwr_baselines/publications/fedavg_mnist/model.py and PyTorch tutorials https://github.com/pytorch/tutorials
 """
 
 
