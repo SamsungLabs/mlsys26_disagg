@@ -6,8 +6,12 @@
 # ==============================================================================
 import secagg_plus_test
 
-if __name__ == '__main__':
+def main():
     secagg_plus_test.USE_SECAGG_PLUS = False
     secagg_plus_test.init_parameters['name'] = 'SecAgg'
     secagg_plus_test.common.run_with_temp_folder(secagg_plus_test.init_parameters, 
                                             secagg_plus_test.run_simulation)
+
+
+if __name__ == '__main__':
+    main()

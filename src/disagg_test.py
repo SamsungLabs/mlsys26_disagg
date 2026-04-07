@@ -688,8 +688,12 @@ def run_simulation(log_name):
     common.run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simulation)
 
 
-if __name__ == '__main__':
+def main():
     mp.set_start_method('spawn')
     init_parameters['name'] = 'DisAgg'
     common.run_with_temp_folder(init_parameters, run_simulation)
+
+
+if __name__ == '__main__':
+    main()
 

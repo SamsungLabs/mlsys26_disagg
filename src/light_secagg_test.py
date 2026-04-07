@@ -6,10 +6,13 @@
 # ==============================================================================
 import disagg_test
 
-if __name__ == '__main__':
+def main():
     disagg_test.USE_LIGHT_SEC_AGG = True
     disagg_test.Client = disagg_test.LightSecAggClient
     disagg_test.Server = disagg_test.LightSecAggServer
     disagg_test.init_parameters['name'] = 'LightSecAgg'
     disagg_test.common.run_with_temp_folder(disagg_test.init_parameters, 
                                             disagg_test.run_simulation)
+
+if __name__ == '__main__':
+    main()

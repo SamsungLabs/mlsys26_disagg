@@ -6,39 +6,43 @@ CPU with 10+ cores, Nvidia GPU with at least 10 GB VRAM and minimum CUDA 12.2 su
 
 ## Installation
 
-The following assumes a virtual environment with Python 3.10 installed and bash as the default terminal.
+A virtual environment with Python 3.10 installed and bash as the default terminal is recommended.
+
+**Note:** NumPy <2.x is required (breaking changes in NumPy 2.x).
 
 ```bash
-# install dependencies
-python -m pip install -r requirements.txt
-
-# create/update python path
-echo "PYTHONPATH=$PYTHONPATH:." >> ~/.bashrc
-source ~/.bashrc
+# install as an editable package to allow modifying constants.py
+pip install -e .
 ```
+
+Confirm installation by executing: `pip show disagg`
 
 ## Datasets
 
 - **MNIST** / **CIFAR-10**: Downloaded automatically via `torchvision` on first run. No manual steps needed.
 - **CIFAR-100** / **CelebA**: Downloaded from HuggingFace and partitioned into federated splits. Pre-computed index files (`dataset/*-splits.npz`) are included in the repo. To build the dataset files, run:
   ```bash
-  python src/dataset/build_dataset.py --dataset_name cifar100
-  python src/dataset/build_dataset.py --dataset_name celeba
+  python -m dataset.build_dataset --dataset_name cifar100
+  python  -m dataset.build_dataset --dataset_name celeba
   ```
+  **Note:** The disk usage for downloading & processing CelebA is ~28GB.
+
 - **SST-2**: Pre-split data is already included in the repo under `dataset/sst2-processed/`. No download needed.
 
 ## Running Experiments
 
 Experiments are configured via `src/constants.py`. Default parameters are in `init_parameters`. To run a specific experiment, pass its index from `var_params` as an argument:
 
+Predefined experiments without editing variables can be executed directly from the command line, as shown below. Here `<index>` specifies an experiment in the range [1-9] with `0` defaulting to a simple test.
+
 ```bash
-PYTHONPATH=$PYTHONPATH:. python src/disagg_test.py <index>
-PYTHONPATH=$PYTHONPATH:. python src/opa_test.py <index>
-PYTHONPATH=$PYTHONPATH:. python src/light_secagg_test.py <index>
-PYTHONPATH=$PYTHONPATH:. python src/secagg_plus_test.py <index>
+python -m disagg_test <index>
+python -m opa_test <index>
+python -m light_secagg_test <index>
+python -m secagg_plus_test <index>
 ```
 
-For plain-text FL experiments, set `USE_SECURITY=False` in `src/constants.py` and use the `src/disagg_test.py` script.
+For plain-text FL experiments, set `USE_SECURITY=False` in `constants.py` and use the `disagg_test` module.
 
 | Index | Description                                        | Recommended num_proc | Scripts to run                                                      |
 |-------|----------------------------------------------------|----------------------| ------------------------------------------------------------------- |
@@ -55,8 +59,12 @@ For plain-text FL experiments, set `USE_SECURITY=False` in `src/constants.py` an
 
 Example — run SST2 experiment with DisAgg:
 ```bash
-PYTHONPATH=$PYTHONPATH:. python src/disagg_test.py 5
+python -m disagg_test 5
 ```
+
+**Notes:**
+- When training with CIFAR10/100, the accuracy after 30 rounds is expected to be ~0.3/~0.5, due to the non-IID dataset splits used.
+- Experiments create temporary files in the folder `./temp`. This is created automatically at the beginning and its contents are deleted automatically once each experiment finishes. It is recommended to have at least 200-300GB free disk space for temporary files.
 
 ## Experiment customization
 

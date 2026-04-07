@@ -44,7 +44,10 @@ def run(d, N, slow_frac_max, s1_max, s2_max, srv_bw, show_print=False):
         # 1st and 2nd group sizes
         n1 = int((1-sf)*N)
         n2 = int(sf*N)
-        
+
+        if n2 == 0:
+            continue # skip if there is no 2nd group
+
         # we need to make sure we also cover scenario where both server_1 and server_2 have avg speeds
         # and the scenario for minimum phase 1 speeds at 10 kBps
 

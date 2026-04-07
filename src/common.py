@@ -15,6 +15,7 @@ import pickle
 import pandas as pd
 import datetime
 import copy
+import shutil
 
 from constants import var_params
 from utils import train_utils
@@ -31,12 +32,16 @@ def get_var_params():
 
     i = 0
     args = sys.argv
-    if len(args) == 2:
+    if len(args) == 1:
+        raise ValueError(f'No experiment index provided. Valid range: 0-{len(var_params)-1}.\nExample: python -m disagg_test <index>')
+    elif len(args) == 2:
         a = int(args[1])
         if a < 0 or a >= len(var_params):
-            raise ValueError('Wrong argument, must be a valid list index!')
+            raise ValueError(f'Invalid experiment index {a}. Must be in range 0-{len(var_params)-1}.')
         else:
             i = a
+    else:
+        raise ValueError(f'Too many arguments. Expected at most 1 (experiment index, range 0-{len(var_params)-1}).')
 
     names = [k for k,_ in var_params[i].items()]
     lists = [v for _,v in var_params[i].items()]
@@ -60,6 +65,15 @@ def run_with_temp_folder(params, func):
     temp_dir = Path('temp')
     if not temp_dir.exists():
         temp_dir.mkdir(parents=True, exist_ok=False)
+
+    stat = shutil.disk_usage(temp_dir)
+    free_gb = stat.free // (1024 * 1024 * 1024)
+    free_min_gb = 200
+    if free_gb < free_min_gb:
+        print(f'WARNING: free disk space is {free_gb}GB. ' +
+              f'It is recommended to have at least {free_min_gb}GB!')
+        time.sleep(5)
+
     with tempfile.TemporaryDirectory(dir=temp_dir) as temp_dir:
         params['Temp'] = temp_dir
         func(name)
@@ -376,8 +390,14 @@ def run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simu
             params[names[i]] = v
 
         if params['USE_TRAINING']:
-            
-            # override dataset temp dir to be inside auto-delete temp folder
+            train_protocols = ['DisAgg', 'OPA']
+            cur_prot = params['name']
+            if cur_prot not in train_protocols:
+                print(f'ERROR: {cur_prot} does not support training!')
+                print('This experiment will be canceled!')
+                continue
+
+            # pass parameters to train_utils module
             train_utils.set_params(params)
 
             train_utils.use_torch_seed(0)
