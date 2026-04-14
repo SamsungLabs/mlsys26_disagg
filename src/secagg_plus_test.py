@@ -20,7 +20,7 @@ from cryptography.hazmat.primitives.serialization import (
     load_pem_public_key,
 )
 import common
-from constants import init_parameters, num_proc
+from constants import init_parameters
 from utils.harary import HararyGraphGenerator
 from secret_sharing.shamir import Shamir
 from utils.diffie_hellman import DiffieHellman
@@ -287,8 +287,8 @@ class Server(Member):
         self.neighbors_shares = {}   # shares for the neighbors
 
         inputs = [(c, self.all_keys) for c in clients]
-        if num_proc > 0:
-            with Pool(num_proc) as p:
+        if self.num_proc > 0:
+            with Pool(self.num_proc) as p:
                 shares = list(tqdm(p.imap(client_shares_worker, inputs),
                                     total=len(inputs), desc='Clients-CreateShares'))
                 p.close()
@@ -312,8 +312,8 @@ class Server(Member):
 
     def get_masked_models(self, clients):
         inputs = [(c, self.neighbors_shares[c.cid]) for c in clients]
-        if num_proc > 0:
-            with Pool(num_proc) as p:
+        if self.num_proc > 0:
+            with Pool(self.num_proc) as p:
                 masked_models = list(tqdm(p.imap(client_model_worker, inputs),
                                     total=len(inputs), desc='Clients-Mask'))
                 p.close()
@@ -333,8 +333,8 @@ class Server(Member):
     def request_shares(self, clients):
         dropouts = []   # dropout IDs
         inputs = [(c, dropouts) for c in clients]
-        if num_proc > 0:
-            with Pool(num_proc) as p:
+        if self.num_proc > 0:
+            with Pool(self.num_proc) as p:
                 shares = list(tqdm(p.imap(client_request_shares_worker, inputs),
                                     total=len(inputs), desc='Clients-SendShares'))
                 p.close()

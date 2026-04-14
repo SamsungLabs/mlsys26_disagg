@@ -15,11 +15,9 @@ import pickle
 
 from queue import Empty
 
-from constants import init_parameters, num_proc
-
 import utils.quantization as quantization
 import common
-from constants import init_parameters, num_proc
+from constants import init_parameters
 from secret_sharing.lcc_codec import LagrangeCodec
 from secret_sharing.packed_codec import PackedCodec
 import utils.train_utils as train_utils
@@ -456,12 +454,12 @@ class Server(Member):
         super().__init__(parameters, codec, q_quantizer, p_quantizer, m_quantizer)
 
     def fit_clients(self, clients):
-        if num_proc > 0:
+        if self.num_proc > 0:
             with mp.Manager() as manager:
                 lock = manager.Lock()
                 for i in range(len(clients)):
                     clients[i].lock = lock
-                with NoDaemonPool(num_proc) as p:
+                with NoDaemonPool(self.num_proc) as p:
                     all_res = list(tqdm(p.imap(client_fit_worker, clients),
                                         total=len(clients), desc='Fit clients'))
                     p.close()
@@ -820,6 +818,9 @@ def start_simulation(parameters):
         A_matrix_client = None
         clock.tic()
 
+    tmp_drop_member = common.MemberBase(parameters)
+    num_proc = tmp_drop_member.num_proc
+
     # initialize clients
     if num_proc > 0:
         inputs = [(parameters, codec, q_quantizer, p_quantizer, m_quantizer, i) for i in range(N)]
@@ -835,8 +836,6 @@ def start_simulation(parameters):
         ]
 
     start_time = time.time()
-
-    tmp_drop_member = common.MemberBase(parameters)
 
     metrics = {'round':[], 'loss':[], 'acc':[]}
     for rnd in range(parameters['TRAINING_ROUNDS']):

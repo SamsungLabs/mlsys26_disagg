@@ -7,7 +7,6 @@
 import tempfile
 from pathlib import Path
 import itertools
-import sys
 import numpy as np
 import time
 import random
@@ -16,10 +15,20 @@ import pandas as pd
 import datetime
 import copy
 import shutil
+import argparse
+import os
 
 from constants import var_params
 from utils import train_utils
 from utils import heterogeneity_sweep_2d as heterogeneity_calc
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--exp_index', choices=range(0, len(var_params)), type=int, required=True)
+    parser.add_argument('--num_proc', choices=range(0, os.cpu_count()), type=int, required=False)
+    args = parser.parse_args()
+    return args
 
 
 def get_var_params():
@@ -30,18 +39,8 @@ def get_var_params():
     Returns two lists one for the names and one for the values of the variables
     '''
 
-    i = 0
-    args = sys.argv
-    if len(args) == 1:
-        raise ValueError(f'No experiment index provided. Valid range: 0-{len(var_params)-1}.\nExample: python -m disagg_test <index>')
-    elif len(args) == 2:
-        a = int(args[1])
-        if a < 0 or a >= len(var_params):
-            raise ValueError(f'Invalid experiment index {a}. Must be in range 0-{len(var_params)-1}.')
-        else:
-            i = a
-    else:
-        raise ValueError(f'Too many arguments. Expected at most 1 (experiment index, range 0-{len(var_params)-1}).')
+    args = get_args()
+    i = args.exp_index
 
     names = [k for k,_ in var_params[i].items()]
     lists = [v for _,v in var_params[i].items()]
@@ -247,6 +246,11 @@ class MemberBase():
         self.comtime = {}   # holds up-down timings per function
         self.temp_dir = self.parameters['Temp']
         self.dropped = False
+        self.num_proc = parameters['num_proc']
+        if self.num_proc is None:
+            # the default is to have no parallel processes, all clients will run in the main process
+            self.num_proc = 0
+        pass
 
     def _apply_server_speed_limit(self, kbps, size_key='N'):
         srv_speed = self.parameters['SRV_KBPS']
@@ -364,6 +368,9 @@ def run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simu
     start_simulation (callable):
     '''
 
+    args = get_args()
+    num_proc = args.num_proc
+
     def _get_timestamp_name():
         now = datetime.datetime.now()
         ts = now.strftime('%Y-%m-%d_%H-%M-%S')
@@ -384,6 +391,8 @@ def run_simulation(log_name, init_parameters, sub_ks, name_val_pairs, start_simu
     for vv in vals:
         # start with the initial constant parameters
         params = copy.deepcopy(init_parameters)
+
+        params['num_proc'] = num_proc
 
         # set variable parameters
         for i,v in enumerate(vv):

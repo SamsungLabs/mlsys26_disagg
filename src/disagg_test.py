@@ -15,7 +15,7 @@ from pathlib import Path
 import utils.quantization as quantization
 from secret_sharing.lcc_codec import LagrangeCodec
 import common
-from constants import init_parameters, num_proc
+from constants import init_parameters
 
 import utils.train_utils as train_utils
 import utils.committee as cmt
@@ -341,12 +341,12 @@ class Server(Member):
         self.clk = None
 
     def fit_clients(self, clients):
-        if num_proc > 0:
+        if self.num_proc > 0:
             with mp.Manager() as manager:
                 lock = manager.Lock()
                 for i in range(len(clients)):
                     clients[i].lock = lock
-                with NoDaemonPool(num_proc) as p:
+                with NoDaemonPool(self.num_proc) as p:
                     all_res = list(tqdm(p.imap(client_fit_worker, clients),
                                         total=len(clients), desc='Fit clients'))
                     p.close()
@@ -366,12 +366,12 @@ class Server(Member):
         self.a_shares = {}   # shares for the aggregators
         self.clk.tic()
 
-        if num_proc > 0:
+        if self.num_proc > 0:
             with mp.Manager() as manager:
                 lock = manager.Lock()
                 for i in range(len(clients)):
                     clients[i].lock = lock
-                with NoDaemonPool(num_proc) as p:
+                with NoDaemonPool(self.num_proc) as p:
                     all_shares = list(tqdm(p.imap(client_worker, clients),
                                         total=len(clients), desc='Clients'))
                     p.close()
@@ -410,9 +410,9 @@ class Server(Member):
         self.aggregated_parts = None
         self.clk.tic()
 
-        if num_proc > 0:
+        if self.num_proc > 0:
             inputs = [(clients[cid], self.a_shares[cid]) for cid in self.aggregators]
-            with NoDaemonPool(num_proc) as p:
+            with NoDaemonPool(self.num_proc) as p:
                 all_aggs = list(tqdm(p.imap(aggregator_worker, inputs),
                                     total=len(inputs), desc='Aggregators'))
                 p.close()
@@ -461,9 +461,9 @@ class LightSecAggServer(Server):
 
     def request_masked_models(self, clients):
         self.clk.tic()
-        if num_proc > 0:
+        if self.num_proc > 0:
             
-            with NoDaemonPool(num_proc) as p:
+            with NoDaemonPool(self.num_proc) as p:
                 masked_models = list(tqdm(p.imap(client_model_worker, clients),
                                     total=len(clients), desc='Clients_Mask'))
                 p.close()
@@ -583,6 +583,7 @@ def start_simulation(parameters):
 
     temp_member = Member(parameters, lcc_codec, quantizer)
     temp_member._save_codec()
+    num_proc = temp_member.num_proc
 
     clk.toc('Setup_LCC')
 
