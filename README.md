@@ -55,9 +55,9 @@ For plain-text FL experiments, set `USE_SECURITY=False` in `constants.py` and us
 | Index | Description | Recommended num_proc | Wall Clock Time | Scripts to run |
 |-------|-------------|----------------------|-----------------|----------------|
 | 0 | Quick test (N=100, M=1k) | 16 | <1m | disagg_test.py |
-| 1 | Set M=N=10k and vary ρ (Figure 6) | 16 | ~13.5h | {disagg\|opa}_test.py |
-| 2 | Sweep M, N with all protocols (Figure 7) | 16 | ~25.7h | {disagg\|opa\|light_secagg\|secagg_plus}_test.py |
-| 3 | Set M=N=100k and vary ρ (Table 3) | 4 | >1d | {disagg\|opa}_test.py |
+| 1 | Set M=N=10k and vary ρ (Figure 7) | 16 | ~13.5h | {disagg\|opa}_test.py |
+| 2 | Sweep M, N with all protocols (Figure 6) | 16 | ~25.7h | {disagg\|opa\|light_secagg\|secagg_plus}_test.py |
+| 3 | Set M=N=100k and vary ρ (Table 2) | 4 | >1d | {disagg\|opa}_test.py |
 | 4 | Set M=N=10k and vary γ,δ (Figure 8) | 16 | ~23.2h | {disagg\|opa}_test.py |
 | 5 | Train NLP model with SST2 (Figure 9c-d) | 2 | ~3.5h | {disagg\|opa}_test.py for lora_r=16, disagg_test.py for lora_r=64 |
 | 6 | Train EfficientNet model with CELEBA (Figure 9e) | 2 | ~4.3h | {disagg\|opa}_test.py |
@@ -78,9 +78,12 @@ python -m disagg_test --exp_index=5 --num_proc=2
 
 Experiments can be customized by modifying the configuration parameters in `src/constants.py`. Edit `init_parameters` to change default values, or add new sweep configurations to `var_params`.
 
-## Citation
 
-**Note:** This README corresponds to the artifact evaluation version of the paper.
+## Paper
+
+[Arxiv Link](https://arxiv.org/abs/2605.13708)
+
+## Citation
 
 ```
 Mehmood, H., Tatsis, G., Alexopoulos, D., Saravanan, K., Xu, J., Drosou, A., and Ozay, M. DisAgg: Distributed Aggregators for Efficient Secure Aggregation in Federated Learning. To appear in Proceedings of the Ninth Annual Conference on Machine Learning and Systems, MLSys 2026.
